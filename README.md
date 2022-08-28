@@ -10,7 +10,7 @@ The project is divided into separate files, each file contains one of the struct
 
 ## Interacting with contract
 
-Deployed game contract in testnet: `d954mas.testnet`
+Deployed game contract in testnet: `cryptoneonhex_d954mas.testnet`
 
 #### `create_game(first_player: AccountId, second_player: AccountId, field_size: usize) -> GameIndex`
 

@@ -1,0 +1,1 @@
+near deploy --accountId cryptoneonhex_d954mas.testnet --wasmFile res/hex_game.wasm --initFunction new --initArgs '{}'
