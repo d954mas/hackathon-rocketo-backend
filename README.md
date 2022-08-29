@@ -16,13 +16,13 @@ Deployed game contract in testnet: `cryptoneonhex_d954mas.testnet`
 
 Creates new game with given parameters and returns index of created game. For example:
 ```console
-➜ near call hex-game.klimoza.testnet create_game '{"first_player": "crossword.klimoza.testnet", "second_player": "klimoza.testnet", "field_size": 2}' --accountId hex-game.klimoza.testnet --amount 2
-Scheduling a call: hex-game.klimoza.testnet.create_game({"first_player": "crossword.klimoza.testnet", "second_player": "klimoza.testnet", "field_size": 2})
+➜ near call cryptoneonhex_d954mas.testnet create_game '{"first_player": "crossword.klimoza.testnet", "second_player": "klimoza.testnet", "field_size": 2}' --accountId cryptoneonhex_d954mas.testnet --amount 2
+Scheduling a call: cryptoneonhex_d954mas.testnet.create_game({"first_player": "crossword.klimoza.testnet", "second_player": "klimoza.testnet", "field_size": 2})
 Doing account.functionCall()
 
-	Log [hex-game.klimoza.testnet]: Created board:
-	Log [hex-game.klimoza.testnet]: . .
-	Log [hex-game.klimoza.testnet]:  . .
+	Log [cryptoneonhex_d954mas.testnet]: Created board:
+	Log [cryptoneonhex_d954mas.testnet]: . .
+	Log [cryptoneonhex_d954mas.testnet]:  . .
 
 4
 ```
@@ -44,16 +44,16 @@ pub struct Cell {
 ```
 You can omit the `cell` parameter if `move_type` is `SWAP`(i.e. applying swap rule on the current move). For example:
 ```console
-➜ near call hex-game.klimoza.testnet make_move '{"index": 4, "move_type": "SWAP"}' --accountId klimoza.testnet
-Scheduling a call: hex-game.klimoza.testnet.make_move({"index": 4, "move_type": "SWAP"})
+➜ near call cryptoneonhex_d954mas.testnet make_move '{"index": 4, "move_type": "SWAP"}' --accountId klimoza.testnet
+Scheduling a call: cryptoneonhex_d954mas.testnet.make_move({"index": 4, "move_type": "SWAP"})
 Doing account.functionCall()
 
-	Log [hex-game.klimoza.testnet]: Old board:
-	Log [hex-game.klimoza.testnet]: . R
-	Log [hex-game.klimoza.testnet]:  . .
-	Log [hex-game.klimoza.testnet]: New board:
-	Log [hex-game.klimoza.testnet]: . .
-	Log [hex-game.klimoza.testnet]:  B .
+	Log [cryptoneonhex_d954mas.testnet]: Old board:
+	Log [cryptoneonhex_d954mas.testnet]: . R
+	Log [cryptoneonhex_d954mas.testnet]:  . .
+	Log [cryptoneonhex_d954mas.testnet]: New board:
+	Log [cryptoneonhex_d954mas.testnet]: . .
+	Log [cryptoneonhex_d954mas.testnet]:  B .
 
 {
   first_player: 'crossword.klimoza.testnet',
@@ -69,13 +69,13 @@ Doing account.functionCall()
 #### `get_game(index: GameIndex) -> Option<Game>`
 Returns the game at the given index(if there is one). For example:
 ```console
-➜ near call hex-game.klimoza.testnet get_game '{"index": 4}' --accountId hex-game.klimoza.testnet
-Scheduling a call: hex-game.klimoza.testnet.get_game({"index": 4})
+➜ near call cryptoneonhex_d954mas.testnet get_game '{"index": 4}' --accountId cryptoneonhex_d954mas.testnet
+Scheduling a call: cryptoneonhex_d954mas.testnet.get_game({"index": 4})
 Doing account.functionCall()
 
-	Log [hex-game.klimoza.testnet]: Game board:
-	Log [hex-game.klimoza.testnet]: R B
-	Log [hex-game.klimoza.testnet]:  B .
+	Log [cryptoneonhex_d954mas.testnet]: Game board:
+	Log [cryptoneonhex_d954mas.testnet]: R B
+	Log [cryptoneonhex_d954mas.testnet]:  B .
 
 {
   first_player: 'crossword.klimoza.testnet',
@@ -91,7 +91,7 @@ Doing account.functionCall()
 #### `check_premium_account(account_id: AccountId) -> bool`
 Checks for a locked, expirable, active Roketo stream going from `account_id` to `hex_game_account`. Returns Promise. For example:
 ```console
-➜ near call wrap.testnet ft_transfer_call '{"receiver_id": "streaming-r-v2.dcversus.testnet",  "amount": "2200000000000000000000000", "memo": "Roketo transfer", "msg": "{\"Create\":{\"request\":{\"balance\":\"2000000000000000000000000\", \"owner_id\": \"klimoza.testnet\",\"receiver_id\":\"hex-game.klimoza.testnet\",\"token_name\": \"wrap.testnet\", \"tokens_per_sec\":\"6666666666666666666667\", \"is_locked\": true, \"is_expirable\": true}}}"}' --accountId klimoza.testnet --depositYocto 1 --gas 200000000000000
+➜ near call wrap.testnet ft_transfer_call '{"receiver_id": "streaming-r-v2.dcversus.testnet",  "amount": "2200000000000000000000000", "memo": "Roketo transfer", "msg": "{\"Create\":{\"request\":{\"balance\":\"2000000000000000000000000\", \"owner_id\": \"klimoza.testnet\",\"receiver_id\":\"cryptoneonhex_d954mas.testnet\",\"token_name\": \"wrap.testnet\", \"tokens_per_sec\":\"6666666666666666666667\", \"is_locked\": true, \"is_expirable\": true}}}"}' --accountId klimoza.testnet --depositYocto 1 --gas 200000000000000
 Doing account.functionCall()
 
 	Log [wrap.testnet]: Transfer 2200000000000000000000000 from klimoza.testnet to streaming-r-v2.dcversus.testnet
@@ -101,8 +101,8 @@ Doing account.functionCall()
 
 '2200000000000000000000000'
 
-➜ near call hex-game.klimoza.testnet check_premium_account '{"account_id": "klimoza.testnet"}' --accountId klimoza.testnet
-Scheduling a call: hex-game.klimoza.testnet.check_premium_account({"account_id": "klimoza.testnet"})
+➜ near call cryptoneonhex_d954mas.testnet check_premium_account '{"account_id": "klimoza.testnet"}' --accountId klimoza.testnet
+Scheduling a call: cryptoneonhex_d954mas.testnet.check_premium_account({"account_id": "klimoza.testnet"})
 
 true
 ```
