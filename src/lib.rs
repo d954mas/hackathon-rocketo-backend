@@ -48,6 +48,14 @@ impl Contract {
     ) -> GameIndex {
         let initial_storage_usage = env::storage_usage();
 
+         require!(
+                    first_player==env::signer_account_id(),
+                    "You are not first player"
+                );
+         require!(
+                first_player!=second_player,
+                "Can't play with yourself"
+            );
         let index = self.games.len();
         let size = field_size.unwrap_or(11);
         self.games
