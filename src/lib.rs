@@ -5,6 +5,7 @@ use game_with_data::GameWithData;
 use near_contract_standards::non_fungible_token::refund_deposit;
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::Vector;
+use near_sdk::collections::UnorderedMap;
 use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::{env, near_bindgen, require, AccountId, BorshStorageKey, PanicOnDefault, Promise};
 use roketo::get_account_outgoing_streams;
@@ -22,10 +23,32 @@ pub enum MoveType {
     SWAP,
 }
 
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone)]
+#[serde(crate = "near_sdk::serde")]
+pub struct PlayerData {
+    pub id:AccountId,
+    pub games:Vector<GameIndex>,
+}
+
+impl PlayerData {
+pub fn new(player_id: AccountId) -> Self {
+      let prefix: Vec<u8> = [
+                        b"s".as_slice(),
+                        &near_sdk::env::sha256_array(player_id.as_bytes()),
+                   ].concat();
+           PlayerData {
+               id: player_id,
+                // Constructing a unique prefix for a nested UnorderedSet from a concatenation
+                // of a prefix and a hash of the account id.
+               games: Vector::new(prefix),
+           }
+       }
+}
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct Contract {
     pub games: Vector<GameWithData>,
+    pub players: UnorderedMap<AccountId,PlayerData>,
     pub roketo_acc: Option<AccountId>,
 }
 
@@ -35,6 +58,8 @@ impl Contract {
     pub fn new(roketo_acc: Option<AccountId>) -> Self {
         Self {
             games: Vector::new(StorageKey::Games),
+            //https://docs.near.org/sdk/rust/contract-structure/collections
+            players:  UnorderedMap::new(b"s".to_vec()), // // Initializing `players` with unique key prefix.
             roketo_acc,
         }
     }
@@ -57,6 +82,24 @@ impl Contract {
                 "Can't play with yourself"
             );
         let index = self.games.len();
+
+
+        let playerData1 = self.players.get(&first_player);
+        if(playerData1.is_none()){
+            playerData1 = Some(PlayerData::new(first_player));
+            self.players.insert(&first_player, &playerData1.unwrap());
+        }
+        playerData1.unwrap().games.push(&index);
+
+        let playerData2= self.players.get(&second_player);
+        if(playerData2.is_none()){
+            playerData2 = Some(PlayerData::new(second_player));
+            self.players.insert(&second_player, &playerData2.unwrap());
+        }
+        playerData2.unwrap().games.push(&index);
+
+
+
         let size = field_size.unwrap_or(11);
         self.games
             .push(&GameWithData::new(first_player, second_player, size));
