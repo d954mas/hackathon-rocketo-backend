@@ -16,7 +16,7 @@ pub struct GameWithData {
 impl GameWithData {
     pub fn new(first_player: AccountId, second_player: AccountId, field_size: usize) -> Self {
         Self {
-            game: Game::new(first_player, second_player, field_size),
+            game: Game::new(first_player, second_player, field_size,),
             data: Board::new(field_size),
         }
     }

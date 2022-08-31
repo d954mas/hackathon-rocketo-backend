@@ -1,6 +1,6 @@
 use cell::Cell;
 use external::{Stream, StreamStatus};
-use game::{Game, GameIndex};
+use game::{Game, GameIndex, MoveType};
 use game_with_data::GameWithData;
 use near_contract_standards::non_fungible_token::refund_deposit;
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
@@ -16,12 +16,7 @@ pub enum StorageKey {
     Field { game_id: GameIndex },
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
-#[serde(crate = "near_sdk::serde")]
-pub enum MoveType {
-    PLACE,
-    SWAP,
-}
+
 
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone)]
 #[serde(crate = "near_sdk::serde")]

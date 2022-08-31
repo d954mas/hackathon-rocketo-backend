@@ -4,6 +4,28 @@ use near_sdk::{env, require, AccountId, BlockHeight};
 
 use crate::board::Board;
 use crate::cell::Cell;
+use near_sdk::collections::Vector;
+
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone)]
+#[serde(crate = "near_sdk::serde")]
+pub struct MoveHistory {
+    pub cell:Cell,
+    pub move_type: MoveType
+}
+
+impl MoveHistory {
+    pub fn new(cell: Cell, move_type: MoveType) -> Self {
+        Self { cell, move_type }
+    }
+}
+
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
+#[serde(crate = "near_sdk::serde")]
+pub enum MoveType {
+    PLACE,
+    SWAP,
+}
+
 
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone)]
 #[serde(crate = "near_sdk::serde")]
@@ -15,12 +37,14 @@ pub struct Game {
     pub current_block_height: BlockHeight,
     pub prev_block_height: BlockHeight,
     pub is_finished: bool,
+    pub history:Vec<MoveHistory>
 }
 
 pub type GameIndex = u64;
 
 impl Game {
     pub fn new(first_player: AccountId, second_player: AccountId, field_size: usize) -> Self {
+
         Game {
             first_player,
             second_player,
@@ -29,6 +53,7 @@ impl Game {
             current_block_height: env::block_height(),
             prev_block_height: 0,
             is_finished: false,
+            history:Vec::new()
         }
     }
 
