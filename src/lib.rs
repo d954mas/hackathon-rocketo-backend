@@ -80,12 +80,12 @@ impl Contract {
 
         let playerData1Check = self.players.get(&first_player);
         if(playerData1Check.is_none()){
-            self.players.insert(&first_player, &PlayerData::new(first_player));
+            self.players.insert(&first_player, &PlayerData::new(AccountId::new_unchecked(first_player.to_string())));
         }
 
         let playerData2Check= self.players.get(&second_player);
         if(playerData2Check.is_none()){
-            self.players.insert(&second_player, &PlayerData::new(second_player));
+            self.players.insert(&second_player, &PlayerData::new(AccountId::new_unchecked(second_player.to_string())));
         }
 
 
