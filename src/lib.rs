@@ -18,8 +18,7 @@ pub enum StorageKey {
 
 
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone)]
-#[serde(crate = "near_sdk::serde")]
+#[derive(BorshDeserialize, BorshSerialize)]
 pub struct PlayerData {
     pub id:AccountId,
     pub games:Vector<GameIndex>,
