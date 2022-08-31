@@ -78,19 +78,19 @@ impl Contract {
         let index = self.games.len();
 
 
-        let playerData1 = self.players.get(&first_player);
-        if(playerData1.is_none()){
-            playerData1 = Some(PlayerData::new(first_player));
-            self.players.insert(&first_player, &playerData1.unwrap());
+        let playerData1Check = self.players.get(&first_player);
+        if(playerData1Check.is_none()){
+            self.players.insert(&first_player, &PlayerData::new(first_player));
         }
-        playerData1.unwrap().games.push(&index);
 
-        let playerData2= self.players.get(&second_player);
-        if(playerData2.is_none()){
-            playerData2 = Some(PlayerData::new(second_player));
-            self.players.insert(&second_player, &playerData2.unwrap());
+        let playerData2Check= self.players.get(&second_player);
+        if(playerData2Check.is_none()){
+            self.players.insert(&second_player, &PlayerData::new(second_player));
         }
-        playerData2.unwrap().games.push(&index);
+
+
+        self.players.get(&first_player).unwrap().games.push(&index);
+        self.players.get(&second_player).unwrap().games.push(&index);
 
 
 
