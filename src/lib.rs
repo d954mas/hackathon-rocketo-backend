@@ -88,10 +88,16 @@ impl Contract {
             self.players.insert(&second_player, &PlayerData::new(AccountId::new_unchecked(second_player.to_string())));
         }
 
+        let mut player1 = self.players.get(&first_player).unwrap();
+        player1.games.push(&index);
+        self.players.insert(&first_player,&player1);
 
-        self.players.get(&first_player).unwrap().games.push(&index);
-        self.players.get(&second_player).unwrap().games.push(&index);
+        //near_sdk::env::state_write(&self.players.get(&first_player).unwrap().games);
 
+
+        let mut player2 = self.players.get(&second_player).unwrap();
+        player2.games.push(&index);
+        self.players.insert(&second_player,&player2);
 
 
         let size = field_size.unwrap_or(11);
@@ -142,6 +148,36 @@ impl Contract {
         self.games.replace(index, &game_with_data);
         return self.games.get(index).unwrap().game;
     }
+
+     pub fn get_games_list(&self, player: AccountId) -> Vec<GameIndex> {
+        let mut vector = Vec::new();
+        let playerData = self.players.get(&player);
+        if(playerData.is_some()){
+             for f in playerData.unwrap().games.iter() {
+               vector.push(f);
+            }
+        }
+        vector
+    }
+
+     pub fn get_games_active_list(&self, player: AccountId) -> Vec<GameIndex> {
+            let mut vector = Vec::new();
+            let playerData = self.players.get(&player);
+            if(playerData.is_some()){
+                 for f in playerData.unwrap().games.iter() {
+                    let game = self.games.get(f).map(|x| x.game);
+                    if game.is_some() {
+                        if(!game.unwrap().is_finished){
+                            vector.push(f);
+                        }
+                    }
+                }
+            }
+            vector
+        }
+
+
+
 
     pub fn check_premium_account(&self, account_id: AccountId) -> Promise {
         get_account_outgoing_streams(
