@@ -66,7 +66,7 @@ impl GameForFront {
             prev_block_height: game.prev_block_height,
             is_finished: game.is_finished,
             give_up: game.give_up,
-            history:  Vec::new()
+            history:  game.history.clone()
         }
     }
 }

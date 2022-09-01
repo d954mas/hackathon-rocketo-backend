@@ -116,13 +116,13 @@ impl Contract {
         index
     }
 
-    pub fn get_game(&self, index: GameIndex) -> Option<Game> {
+    pub fn get_game(&self, index: GameIndex) -> Option<game::GameForFront> {
         let game = self.games.get(index).map(|x| x.game);
         if game.is_some() {
-            env::log_str("Game board:");
-            game.clone().unwrap().board.debug_logs();
+            Some(game.unwrap().serializeForFront())
+        }else{
+            None
         }
-        game
     }
 
     pub fn make_move(&mut self, index: GameIndex, move_type: MoveType, cell: Option<Cell>) -> Game {

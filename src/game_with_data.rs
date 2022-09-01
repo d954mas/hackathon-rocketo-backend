@@ -21,8 +21,8 @@ impl GameWithData {
         }
     }
 
-    pub fn make_move(&mut self, move_type: MoveType, cell: Option<Cell>) {
-        match (move_type, cell) {
+    pub fn make_move(&mut self,  move_type: MoveType, cell: Option<Cell>) {
+        match (move_type.clone(), cell.clone()) {
             (MoveType::PLACE, Some(cell)) => {
                 if self.game.turn % 2 == 0 {
                     require!(
@@ -50,6 +50,7 @@ impl GameWithData {
             }
             _ => env::panic_str("Incorrect move args"),
         }
+        self.game.history.push(game::MoveHistory { cell: cell.unwrap(), move_type:move_type });
     }
 
     fn process_cell(&mut self, cell: Cell) {
