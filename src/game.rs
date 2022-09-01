@@ -37,14 +37,44 @@ pub struct Game {
     pub current_block_height: BlockHeight,
     pub prev_block_height: BlockHeight,
     pub is_finished: bool,
+    pub give_up: i32, //0-no give_up 1-first_player, 2-second_player
     pub history:Vec<MoveHistory>
+}
+
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone)]
+#[serde(crate = "near_sdk::serde")]
+pub struct GameForFront {
+    pub first_player: AccountId,
+    pub second_player: AccountId,
+    pub turn: usize,
+    pub board: Vec<String>,
+    pub current_block_height: BlockHeight,
+    pub prev_block_height: BlockHeight,
+    pub is_finished: bool,
+    pub give_up: i32, //0-no give_up 1-first_player, 2-second_player
+    pub history:Vec<MoveHistory>
+}
+
+impl GameForFront {
+    pub fn new(game:&mut  Game) -> Self {
+        GameForFront {
+            first_player:AccountId::new_unchecked(game.first_player.to_string()),
+            second_player:AccountId::new_unchecked(game.second_player.to_string()),
+            turn:game.turn,
+            board: game.board.get_board_as_strings(),
+            current_block_height: game.current_block_height,
+            prev_block_height: game.prev_block_height,
+            is_finished: game.is_finished,
+            give_up: game.give_up,
+            history:  Vec::new()
+        }
+    }
 }
 
 pub type GameIndex = u64;
 
 impl Game {
     pub fn new(first_player: AccountId, second_player: AccountId, field_size: usize) -> Self {
-
         Game {
             first_player,
             second_player,
@@ -53,6 +83,7 @@ impl Game {
             current_block_height: env::block_height(),
             prev_block_height: 0,
             is_finished: false,
+            give_up:0,
             history:Vec::new()
         }
     }
@@ -69,6 +100,12 @@ impl Game {
             self.prev_block_height = self.current_block_height;
             self.current_block_height = env::block_height();
         }
+    }
+
+    pub fn serializeForFront(&mut self) -> GameForFront {
+        let result = GameForFront::new(self);
+
+        result
     }
 
     pub fn swap_rule(&mut self) -> Cell {

@@ -132,6 +132,11 @@ impl Contract {
             "Game is already finished!"
         );
 
+        require!(
+            !matches!(move_type,game::MoveType::SWAP),
+            "SWAP not supported"
+        );
+
         let old_board = game_with_data.game.board.clone();
         game_with_data.make_move(move_type, cell);
 
