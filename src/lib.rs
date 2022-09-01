@@ -101,6 +101,10 @@ impl Contract {
 
 
         let size = field_size.unwrap_or(11);
+          require!(
+                            size==7 || size == 11 || size == 13,
+                            "Only support 7,11,13 sized board"
+                        );
         self.games
             .push(&GameWithData::new(first_player, second_player, size));
 
