@@ -124,8 +124,10 @@ impl Contract {
             None
         }
     }
-
+    #[payable]
     pub fn make_move(&mut self, index: GameIndex, move_type: MoveType, cell: Option<Cell>) -> Game {
+       let initial_storage_usage = env::storage_usage();
+
         let mut game_with_data = self.games.get(index).expect("Game doesn't exist.");
         require!(
             !game_with_data.game.is_finished,
@@ -155,6 +157,9 @@ impl Contract {
         }
 
         self.games.replace(index, &game_with_data);
+        let required_storage_in_bytes = env::storage_usage() - initial_storage_usage;
+        refund_deposit(required_storage_in_bytes);
+
         return self.games.get(index).unwrap().game;
     }
 
