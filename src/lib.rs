@@ -190,6 +190,22 @@ impl Contract {
             vector
         }
 
+        pub fn get_games_finish_list(&self, player: AccountId) -> Vec<GameIndex> {
+                    let mut vector = Vec::new();
+                    let playerData = self.players.get(&player);
+                    if(playerData.is_some()){
+                         for f in playerData.unwrap().games.iter() {
+                            let game = self.games.get(f).map(|x| x.game);
+                            if game.is_some() {
+                                if(game.unwrap().is_finished){
+                                    vector.push(f);
+                                }
+                            }
+                        }
+                    }
+                    vector
+                }
+
 
 
 
